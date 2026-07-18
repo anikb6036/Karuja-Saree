@@ -1,0 +1,6 @@
+{
+  "name": "E-Commerce Platform with Admin Panel and Analytics",
+  "description": "A high-performance minimalist e-commerce platform featuring dual customer and administrator panels, seamless checkout, real-time inventory management, automated shipping notifications, multiple payment gateways, social media ad-targeting simulations, and real-time analytics with automated business insights.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
