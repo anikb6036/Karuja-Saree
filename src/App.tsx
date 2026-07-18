@@ -94,22 +94,12 @@ export default function App() {
     );
   }
 
-  if (!currentUser) {
-    return (
-      <LoginPage
-        usersList={usersList}
-        onLoginSuccess={handleLogin}
-        onRefreshUsers={fetchAllData}
-      />
-    );
-  }
-
   return (
     <div className="flex flex-col min-h-screen bg-[#FAF7F2]">
       {/* Main Container */}
       <div className="flex-1 flex flex-col">
         <AnimatePresence mode="wait">
-          {currentUser.role === 'admin' ? (
+          {currentUser && currentUser.role === 'admin' ? (
             <motion.div
               key="admin-workspace"
               initial={{ opacity: 0, y: 5 }}
@@ -149,6 +139,7 @@ export default function App() {
                 onIdentityChange={handleIdentityChange}
                 onLogout={handleLogout}
                 onRefreshAll={fetchAllData}
+                onLoginSuccess={handleLogin}
               />
             </motion.div>
           )}

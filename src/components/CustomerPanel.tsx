@@ -2,10 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { Product, Order, OrderItem, PaymentGateway, UserProfile } from '../types.js';
 import { 
   Search, ShoppingCart, Check, CreditCard, ChevronLeft, ChevronRight, ChevronDown,
-  MapPin, Phone, User, Package, Clock, ShieldCheck, Star, ArrowRight, ArrowLeft,
+  MapPin, Phone, User, Package, Clock, ShieldCheck, ArrowRight, ArrowLeft,
   LogOut, RefreshCw, Sparkles, Wind, Layers
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import LoginPage from './LoginPage.js';
+
+const Star = ({ className = "w-5 h-5" }: { className?: string }) => {
+  return (
+    <svg 
+      viewBox="0 0 24 24" 
+      className={className} 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Left side: Lighter/Bright yellow-gold */}
+      <polygon 
+        points="12,2 8.91,8.26 2,9.27 7,14.14 5.82,21.02 12,17.77" 
+        fill="#FFD215" 
+      />
+      {/* Right side: Slightly darker/warm golden amber */}
+      <polygon 
+        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77" 
+        fill="#FFAC0A" 
+      />
+    </svg>
+  );
+};
 
 import heroBanarasiPalace from '../assets/images/hero_banarasi_palace_1784377238796.jpg';
 import heroKanjeevaramPillars from '../assets/images/hero_kanjeevaram_pillars_1784377258053.jpg';
@@ -46,7 +69,7 @@ const heroSlides = [
 ];
 
 interface CustomerPanelProps {
-  user: UserProfile;
+  user: UserProfile | null;
   products: Product[];
   orders: Order[];
   onUpdateProfile: (updated: Partial<UserProfile>) => void;
@@ -56,6 +79,7 @@ interface CustomerPanelProps {
   onIdentityChange?: (userId: string) => void;
   onLogout?: () => void;
   onRefreshAll?: () => void;
+  onLoginSuccess?: (user: UserProfile) => void;
 }
 
 export default function CustomerPanel({
@@ -68,7 +92,8 @@ export default function CustomerPanel({
   usersList = [],
   onIdentityChange,
   onLogout,
-  onRefreshAll
+  onRefreshAll,
+  onLoginSuccess
 }: CustomerPanelProps) {
   // Navigation & UI States
   const [activeTab, setActiveTab] = useState<'shop' | 'orders' | 'profile'>('shop');
@@ -77,6 +102,7 @@ export default function CustomerPanel({
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isCollectionOpen, setIsCollectionOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
     if (activeTab !== 'shop' || searchQuery || selectedCategory !== 'All') return;
@@ -92,9 +118,9 @@ export default function CustomerPanel({
 
   // Checkout flow
   const [checkoutStep, setCheckoutStep] = useState<'cart' | 'shipping' | 'payment' | 'success'>('cart');
-  const [shippingName, setShippingName] = useState(user.name);
-  const [shippingAddress, setShippingAddress] = useState(user.address);
-  const [shippingPhone, setShippingPhone] = useState(user.phone);
+  const [shippingName, setShippingName] = useState(user?.name || '');
+  const [shippingAddress, setShippingAddress] = useState(user?.address || '');
+  const [shippingPhone, setShippingPhone] = useState(user?.phone || '');
   const [paymentGateway, setPaymentGateway] = useState<PaymentGateway>('credit_card');
   const [cardNumber, setCardNumber] = useState('');
   const [cardExpiry, setCardExpiry] = useState('');
@@ -123,6 +149,11 @@ export default function CustomerPanel({
   const cartTotal = cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
 
   const addToCart = (product: Product) => {
+    if (!user) {
+      setIsLoginModalOpen(true);
+      triggerToast('Please sign in to add items to your cart');
+      return;
+    }
     if (product.stock <= 0) {
       triggerToast('Item is currently out of stock');
       return;
@@ -171,9 +202,9 @@ export default function CustomerPanel({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          customerId: user.id,
+          customerId: user?.id || '',
           customerName: shippingName,
-          customerEmail: user.email,
+          customerEmail: user?.email || '',
           items: orderItems,
           total: cartTotal,
           paymentGateway,
@@ -202,15 +233,17 @@ export default function CustomerPanel({
 
   // Sync profile details with local state on load
   useEffect(() => {
-    setShippingName(user.name);
-    setShippingAddress(user.address);
-    setShippingPhone(user.phone);
+    if (user) {
+      setShippingName(user.name);
+      setShippingAddress(user.address);
+      setShippingPhone(user.phone);
+    }
   }, [user]);
 
   const handleProfileSave = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/users/${user.id}`, {
+      const res = await fetch(`/api/users/${user?.id || ''}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -230,7 +263,7 @@ export default function CustomerPanel({
   };
 
   // Get active user's orders
-  const userOrders = orders.filter(o => o.customerId === user.id);
+  const userOrders = user ? orders.filter(o => o.customerId === user.id) : [];
 
   return (
     <div className="flex flex-col min-h-screen bg-[#FCF9F5] font-sans text-neutral-900 selection:bg-[#F5EFE6]">
@@ -313,6 +346,11 @@ export default function CustomerPanel({
             </button>
             <button 
               onClick={() => {
+                if (!user) {
+                  setIsLoginModalOpen(true);
+                  triggerToast('Please sign in to view your cart');
+                  return;
+                }
                 setIsCartOpen(true);
                 setCheckoutStep('cart');
               }}
@@ -328,13 +366,21 @@ export default function CustomerPanel({
               </div>
               <span className="text-[10px] font-medium hidden sm:block">Cart</span>
             </button>
-            {onLogout && (
+            {user ? (
               <button 
                 onClick={onLogout}
                 className="flex flex-col items-center justify-center space-y-1 text-gray-500 hover:text-[#6B1426] transition-colors cursor-pointer"
               >
                 <LogOut className="w-5 h-5" />
                 <span className="text-[10px] font-medium hidden sm:block">Logout</span>
+              </button>
+            ) : (
+              <button 
+                onClick={() => setIsLoginModalOpen(true)}
+                className="flex flex-col items-center justify-center space-y-1 text-gray-500 hover:text-[#6B1426] transition-colors cursor-pointer"
+              >
+                <User className="w-5 h-5" />
+                <span className="text-[10px] font-medium hidden sm:block">Sign In</span>
               </button>
             )}
           </div>
@@ -572,7 +618,21 @@ export default function CustomerPanel({
               My Heirloom Orders & Shipping Milestones
             </h3>
 
-            {userOrders.length === 0 ? (
+            {!user ? (
+              <div className="text-center py-20 bg-white border border-[#EAE3D5] rounded-xl max-w-md mx-auto p-8 space-y-6 shadow-sm">
+                <Package className="w-12 h-12 text-[#C5A880] mx-auto animate-pulse" />
+                <h3 className="font-display font-medium text-lg uppercase tracking-wider text-[#1E110F]">Track Your Orders</h3>
+                <p className="text-xs text-gray-500 leading-relaxed font-mono uppercase tracking-wide">
+                  Please log in to your patron account to view your commission histories and active handloom statuses.
+                </p>
+                <button 
+                  onClick={() => setIsLoginModalOpen(true)}
+                  className="w-full bg-[#6B1426] hover:bg-[#520e1c] text-white py-2.5 font-mono text-[10px] tracking-widest uppercase transition-colors cursor-pointer"
+                >
+                  Sign In As Patron
+                </button>
+              </div>
+            ) : userOrders.length === 0 ? (
               <div className="border border-dashed border-[#EAE3D5] py-20 text-center text-neutral-400 font-mono text-xs bg-white">
                 YOU HAVE PLACED NO PAST ORDERS YET
               </div>
@@ -659,64 +719,80 @@ export default function CustomerPanel({
               My Patron Profile Details
             </h3>
 
-            <form onSubmit={handleProfileSave} className="bg-white border border-[#EAE3D5] p-6 space-y-4 shadow-sm">
-              <div className="space-y-1.5">
-                <label className="block font-mono text-[9px] uppercase tracking-wider text-[#A5927A]">Account Role Status</label>
-                <div className="px-3 py-2 bg-[#FAF7F2] border border-[#EAE3D5] font-mono text-[10px] uppercase tracking-wider text-[#6B1426] flex items-center justify-between">
-                  <span>{user.role} Atelier Account</span>
-                  <span className="text-[#C5A880] font-bold">● Authenticated</span>
-                </div>
+            {!user ? (
+              <div className="text-center py-20 bg-white border border-[#EAE3D5] rounded-xl max-w-md mx-auto p-8 space-y-6 shadow-sm">
+                <User className="w-12 h-12 text-[#C5A880] mx-auto animate-pulse" />
+                <h3 className="font-display font-medium text-lg uppercase tracking-wider text-[#1E110F]">Patron Profile</h3>
+                <p className="text-xs text-gray-500 leading-relaxed font-mono uppercase tracking-wide">
+                  Access your delivery destinations, personalized curation parameters, and credentials.
+                </p>
+                <button 
+                  onClick={() => setIsLoginModalOpen(true)}
+                  className="w-full bg-[#6B1426] hover:bg-[#520e1c] text-white py-2.5 font-mono text-[10px] tracking-widest uppercase transition-colors cursor-pointer"
+                >
+                  Sign In As Patron
+                </button>
               </div>
-
-              <div className="space-y-1.5">
-                <label className="block font-mono text-[9px] uppercase tracking-wider text-[#A5927A]">Primary Contact Name</label>
-                <div className="relative">
-                  <User className="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-neutral-400" />
-                  <input
-                    type="text"
-                    required
-                    value={shippingName}
-                    onChange={(e) => setShippingName(e.target.value)}
-                    className="w-full pl-8 pr-3 py-2 border border-[#EAE3D5] font-mono text-[10px] tracking-wider uppercase focus:outline-none focus:border-[#6B1426] text-neutral-800"
-                  />
+            ) : (
+              <form onSubmit={handleProfileSave} className="bg-white border border-[#EAE3D5] p-6 space-y-4 shadow-sm">
+                <div className="space-y-1.5">
+                  <label className="block font-mono text-[9px] uppercase tracking-wider text-[#A5927A]">Account Role Status</label>
+                  <div className="px-3 py-2 bg-[#FAF7F2] border border-[#EAE3D5] font-mono text-[10px] uppercase tracking-wider text-[#6B1426] flex items-center justify-between">
+                    <span>{user?.role} Atelier Account</span>
+                    <span className="text-[#C5A880] font-bold">● Authenticated</span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="space-y-1.5">
-                <label className="block font-mono text-[9px] uppercase tracking-wider text-[#A5927A]">Delivery Mobile Phone</label>
-                <div className="relative">
-                  <Phone className="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-neutral-400" />
-                  <input
-                    type="text"
-                    required
-                    value={shippingPhone}
-                    onChange={(e) => setShippingPhone(e.target.value)}
-                    className="w-full pl-8 pr-3 py-2 border border-[#EAE3D5] font-mono text-[10px] tracking-wider focus:outline-none focus:border-[#6B1426] text-neutral-800"
-                  />
+                <div className="space-y-1.5">
+                  <label className="block font-mono text-[9px] uppercase tracking-wider text-[#A5927A]">Primary Contact Name</label>
+                  <div className="relative">
+                    <User className="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-neutral-400" />
+                    <input
+                      type="text"
+                      required
+                      value={shippingName}
+                      onChange={(e) => setShippingName(e.target.value)}
+                      className="w-full pl-8 pr-3 py-2 border border-[#EAE3D5] font-mono text-[10px] tracking-wider uppercase focus:outline-none focus:border-[#6B1426] text-neutral-800"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className="space-y-1.5">
-                <label className="block font-mono text-[9px] uppercase tracking-wider text-[#A5927A]">Default Shipping Address</label>
-                <div className="relative">
-                  <MapPin className="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-neutral-400" />
-                  <textarea
-                    required
-                    rows={3}
-                    value={shippingAddress}
-                    onChange={(e) => setShippingAddress(e.target.value)}
-                    className="w-full pl-8 pr-3 py-2 border border-[#EAE3D5] font-mono text-[10px] tracking-wider focus:outline-none focus:border-[#6B1426] resize-none text-neutral-800"
-                  />
+                <div className="space-y-1.5">
+                  <label className="block font-mono text-[9px] uppercase tracking-wider text-[#A5927A]">Delivery Mobile Phone</label>
+                  <div className="relative">
+                    <Phone className="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-neutral-400" />
+                    <input
+                      type="text"
+                      required
+                      value={shippingPhone}
+                      onChange={(e) => setShippingPhone(e.target.value)}
+                      className="w-full pl-8 pr-3 py-2 border border-[#EAE3D5] font-mono text-[10px] tracking-wider focus:outline-none focus:border-[#6B1426] text-neutral-800"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <button
-                type="submit"
-                className="w-full py-2 bg-[#6B1426] text-white font-mono text-[10px] uppercase tracking-wider hover:bg-[#540F1D] transition-colors cursor-pointer"
-              >
-                Secure Save Atelier Changes
-              </button>
-            </form>
+                <div className="space-y-1.5">
+                  <label className="block font-mono text-[9px] uppercase tracking-wider text-[#A5927A]">Default Shipping Address</label>
+                  <div className="relative">
+                    <MapPin className="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-neutral-400" />
+                    <textarea
+                      required
+                      rows={3}
+                      value={shippingAddress}
+                      onChange={(e) => setShippingAddress(e.target.value)}
+                      className="w-full pl-8 pr-3 py-2 border border-[#EAE3D5] font-mono text-[10px] tracking-wider focus:outline-none focus:border-[#6B1426] resize-none text-neutral-800"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-2 bg-[#6B1426] text-white font-mono text-[10px] uppercase tracking-wider hover:bg-[#540F1D] transition-colors cursor-pointer"
+                >
+                  Secure Save Atelier Changes
+                </button>
+              </form>
+            )}
           </div>
         )}
       </div>
@@ -1132,6 +1208,54 @@ export default function CustomerPanel({
                     Acquire Masterpiece - ${selectedProduct.price}.00
                   </button>
                 </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Elegant Login Modal Popup */}
+      <AnimatePresence>
+        {isLoginModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Dark glass backdrop overlay */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsLoginModalOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            
+            {/* Modal Content Box */}
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-4xl max-h-[90vh] bg-white shadow-2xl rounded-2xl overflow-y-auto border border-[#EAE3D5] z-10 flex flex-col"
+            >
+              {/* Floating Close Button */}
+              <button 
+                onClick={() => setIsLoginModalOpen(false)}
+                className="absolute top-4 right-4 z-50 bg-[#FAF7F2] hover:bg-[#6B1426] hover:text-white text-gray-700 w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all cursor-pointer font-bold text-xs"
+              >
+                ✕
+              </button>
+
+              <div className="flex-1">
+                <LoginPage 
+                  usersList={usersList}
+                  onLoginSuccess={(loggedInUser) => {
+                    if (onLoginSuccess) {
+                      onLoginSuccess(loggedInUser);
+                    }
+                    setIsLoginModalOpen(false);
+                    triggerToast(`Welcome back, ${loggedInUser.name}!`);
+                  }}
+                  onRefreshUsers={async () => {
+                    if (onRefreshAll) await onRefreshAll();
+                  }}
+                />
               </div>
             </motion.div>
           </div>
