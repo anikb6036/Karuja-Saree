@@ -294,7 +294,7 @@ export default function CustomerPanel({
                <h2 className="font-display font-bold tracking-widest text-lg sm:text-xl text-[#1E110F] uppercase leading-none">
                   KARUJA
                </h2>
-               <span className="text-[8px] sm:text-[9px] font-mono tracking-widest text-[#C5A880] uppercase mt-0.5 font-bold">Heritage Boutique</span>
+               <span className="text-[8px] sm:text-[9px] font-sans tracking-widest text-[#C5A880] uppercase mt-0.5 font-bold">Saree Emporium</span>
              </div>
           </div>
           
@@ -633,8 +633,8 @@ export default function CustomerPanel({
                 </button>
               </div>
             ) : userOrders.length === 0 ? (
-              <div className="border border-dashed border-[#EAE3D5] py-20 text-center text-neutral-400 font-mono text-xs bg-white">
-                YOU HAVE PLACED NO PAST ORDERS YET
+              <div className="border border-dashed border-[#EAE3D5] py-20 text-center text-neutral-500 font-sans text-xs bg-white uppercase tracking-wider">
+                You have placed no past orders yet
               </div>
             ) : (
               <div className="space-y-6">
@@ -643,8 +643,8 @@ export default function CustomerPanel({
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-neutral-100 pb-3 gap-2">
                       <div>
                         <div className="flex items-center space-x-2">
-                          <span className="font-mono text-xs font-bold text-[#1E110F] uppercase">Order #{order.id}</span>
-                          <span className={`px-2 py-0.5 text-[8px] font-mono uppercase tracking-widest ${
+                          <span className="font-sans text-xs font-bold text-[#1E110F] uppercase">Order #{order.id}</span>
+                          <span className={`px-2 py-0.5 text-[8px] font-sans font-semibold uppercase tracking-widest ${
                             order.shippingStatus === 'delivered' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
                             order.shippingStatus === 'shipped' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
                             order.shippingStatus === 'processing' ? 'bg-rose-50 text-[#6B1426] border border-[#6B1426]' :
@@ -653,20 +653,20 @@ export default function CustomerPanel({
                             {order.shippingStatus}
                           </span>
                         </div>
-                        <div className="text-[10px] font-mono text-neutral-400 mt-1">
+                        <div className="text-[10px] font-sans text-neutral-500 mt-1">
                           Placed on: {new Date(order.createdAt).toLocaleString()}
                         </div>
                       </div>
                       <div className="text-left sm:text-right">
-                        <div className="font-mono text-xs font-bold text-[#6B1426]">${order.total}.00</div>
-                        <div className="text-[9px] font-mono text-[#A5927A] mt-0.5">Secure Gateway: {order.paymentGateway.replace('_', ' ').toUpperCase()}</div>
+                        <div className="font-sans text-xs font-bold text-[#6B1426]">${order.total}.00</div>
+                        <div className="text-[9px] font-sans text-[#A5927A] mt-0.5">Secure Gateway: {order.paymentGateway.replace('_', ' ').toUpperCase()}</div>
                       </div>
                     </div>
 
                     {/* Order items */}
                     <div className="space-y-1.5">
                       {order.items.map((item, idx) => (
-                        <div key={idx} className="flex justify-between items-center text-[11px] font-mono text-neutral-600">
+                        <div key={idx} className="flex justify-between items-center text-[11px] font-sans text-neutral-600">
                           <span>{item.name} <span className="text-neutral-400">x{item.quantity}</span></span>
                           <span className="font-semibold text-neutral-800">${item.price * item.quantity}.00</span>
                         </div>
@@ -676,7 +676,7 @@ export default function CustomerPanel({
                     {/* Delivery summary */}
                     <div className="pt-3 border-t border-[#F5EFE6] grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px] text-[#A5927A]">
                       <div>
-                        <div className="font-mono text-[9px] uppercase tracking-wider text-[#A5927A]">Handloom Shipping Destination</div>
+                        <div className="font-sans text-[9px] font-medium uppercase tracking-wider text-[#A5927A]">Handloom Shipping Destination</div>
                         <div className="font-medium text-neutral-800 mt-0.5 flex items-start space-x-1">
                           <MapPin className="w-3 h-3 text-[#C5A880] shrink-0 mt-0.5" />
                           <span>{order.shippingAddress}</span>
@@ -684,8 +684,8 @@ export default function CustomerPanel({
                       </div>
                       {order.trackingNumber && (
                         <div>
-                          <div className="font-mono text-[9px] uppercase tracking-wider text-[#A5927A]">Express Waybill Tracking Code</div>
-                          <div className="font-mono font-medium text-neutral-900 mt-0.5 flex items-center space-x-1.5">
+                          <div className="font-sans text-[9px] font-medium uppercase tracking-wider text-[#A5927A]">Express Waybill Tracking Code</div>
+                          <div className="font-sans font-medium text-neutral-900 mt-0.5 flex items-center space-x-1.5">
                             <Package className="w-3.5 h-3.5 text-[#C5A880]" />
                             <span>{order.trackingNumber}</span>
                           </div>
@@ -695,13 +695,13 @@ export default function CustomerPanel({
 
                     {/* Progress tracker */}
                     <div className="pt-3 border-t border-[#F5EFE6]">
-                      <div className="font-mono text-[9px] uppercase tracking-wider text-[#A5927A] mb-3">Shipping Milestones</div>
+                      <div className="font-sans text-[9px] font-medium uppercase tracking-wider text-[#A5927A] mb-3">Shipping Milestones</div>
                       
                       <div className="relative pl-4 space-y-3.5 border-l border-[#EAE3D5]">
                         {order.notifications.map((notif, nIdx) => (
-                          <div key={nIdx} className="relative flex items-start text-[10px] text-neutral-600">
+                          <div key={nIdx} className="relative flex items-start text-[11px] text-neutral-700">
                             <span className="absolute -left-[20.5px] top-1 w-2.5 h-2.5 rounded-full border-2 border-white bg-[#6B1426]" />
-                            <p className="font-mono leading-relaxed">{notif}</p>
+                            <p className="font-sans leading-relaxed">{notif}</p>
                           </div>
                         ))}
                       </div>
