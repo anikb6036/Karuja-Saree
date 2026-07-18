@@ -20,24 +20,33 @@ export default function App() {
   // Load all backend entities
   const fetchAllData = async () => {
     try {
-      const [prodRes, orderRes, campRes, userRes] = await Promise.all([
-        fetch('/api/products'),
-        fetch('/api/orders'),
-        fetch('/api/campaigns'),
-        fetch('/api/users')
+      const fetchItem = async (url: string) => {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            return await res.json();
+          } else {
+            console.warn(`Fetch to ${url} returned status ${res.status}`);
+            return null;
+          }
+        } catch (err) {
+          console.error(`Error fetching ${url}:`, err);
+          return null;
+        }
+      };
+
+      const [prods, ords, camps, users] = await Promise.all([
+        fetchItem('/api/products'),
+        fetchItem('/api/orders'),
+        fetchItem('/api/campaigns'),
+        fetchItem('/api/users')
       ]);
 
-      if (prodRes.ok && orderRes.ok && campRes.ok && userRes.ok) {
-        const prods = await prodRes.json();
-        const ords = await orderRes.json();
-        const camps = await campRes.json();
-        const users = await userRes.json();
-
-        setProducts(prods);
-        setOrders(ords);
-        setCampaigns(camps);
+      if (prods) setProducts(prods);
+      if (ords) setOrders(ords);
+      if (camps) setCampaigns(camps);
+      if (users) {
         setUsersList(users);
-
         // Try to restore user session if present
         const cachedId = localStorage.getItem('karuja_session_user_id');
         if (cachedId && users.length > 0) {
