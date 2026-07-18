@@ -1,70 +1,70 @@
 import { Product, Order, UserProfile, AdCampaign, AnalyticsSummary, OrderItem, PaymentGateway, ShippingStatus } from '../src/types.js';
 
-// Pre-seeded products (Minimalist Slate/Tech aesthetic)
+// Pre-seeded products (Premium Heritage Saree Boutique)
 let products: Product[] = [
   {
     id: 'prod-1',
-    name: 'Epsilon Mechanical Keyboard',
-    description: 'An elegant tenkeyless mechanical keyboard featuring custom-tuned linear switches, solid anodized aluminum frame, and clean white LED backlighting.',
-    price: 189,
-    stock: 15,
-    category: 'Workstation',
-    imageUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&q=80&w=600',
+    name: 'Karuja Royal Banarasi Silk Saree',
+    description: 'Handwoven in Varanasi using pure mulberry silk and exquisite gold zari threads. Features traditional floral creepers (Bel) and a heavy brocade pallu.',
+    price: 299,
+    stock: 12,
+    category: 'Banarasi Silk',
+    imageUrl: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=600',
     salesCount: 42,
     rating: 4.8
   },
   {
     id: 'prod-2',
-    name: 'Monolith Merino Felt Desk Pad',
-    description: 'Sourced from premium organic merino wool felt. Double-layered construct with a natural cork backing provides acoustic damping and flawless mouse glides.',
-    price: 49,
-    stock: 28,
-    category: 'Accessories',
-    imageUrl: 'https://images.unsplash.com/photo-1616440347437-b1c73416efc2?auto=format&fit=crop&q=80&w=600',
+    name: 'Heritage Kanjeevaram Brocade Saree',
+    description: 'Woven by master artisans in Tamil Nadu. Boasts thick, lustrous gold thread borders paired with rich temple motifs and a solid contrast pallu.',
+    price: 349,
+    stock: 18,
+    category: 'Kanjeevaram Silk',
+    imageUrl: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=600',
     salesCount: 114,
     rating: 4.6
   },
   {
     id: 'prod-3',
-    name: 'Apex Aluminum Monitor Riser',
-    description: 'Ergonomically engineered aircraft-grade aluminum monitor stand with integrated cable routing, storage recess, and non-slip silicone pads.',
-    price: 89,
+    name: 'Elegant Ivory Chanderi Silk Saree',
+    description: 'Feather-light weave combining high-grade silk warp and cotton weft. Embellished with delicate hand-drawn golden butis and a sheer, elegant drape.',
+    price: 159,
     stock: 4, // Low stock warning!
-    category: 'Workstation',
-    imageUrl: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=600',
+    category: 'Chanderi Saree',
+    imageUrl: 'https://images.unsplash.com/photo-1605784401368-5af1d9d6c4dc?auto=format&fit=crop&q=80&w=600',
     salesCount: 81,
     rating: 4.9
   },
   {
     id: 'prod-4',
-    name: 'Nova Wireless Qi Concrete Dock',
-    description: 'Heavyweight hand-poured sculptural concrete base with organic American Walnut inlay. Delivers up to 15W high-speed charging.',
-    price: 69,
+    name: 'Amethyst Organza Floral Saree',
+    description: 'Delicate glass organza with hand-painted pastel blossoms. Features fine metallic scalloped borders and comes with a raw silk blouse piece.',
+    price: 129,
     stock: 22,
-    category: 'Power',
-    imageUrl: 'https://images.unsplash.com/photo-1622445262465-2481c4574875?auto=format&fit=crop&q=80&w=600',
+    category: 'Organza',
+    imageUrl: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=600',
     salesCount: 63,
     rating: 4.5
   },
   {
     id: 'prod-5',
-    name: 'Orbit Anodized Tidy Tray',
-    description: 'Modular magnetic desktop organizer tray machined from solid aluminum blocks. Keep writing tools, paperclips, and memory cards perfectly arranged.',
-    price: 59,
-    stock: 18,
-    category: 'Accessories',
-    imageUrl: 'https://images.unsplash.com/photo-1590244921253-447d1593a228?auto=format&fit=crop&q=80&w=600',
+    name: 'Midnight Jamdani Dhakai Saree',
+    description: 'A fine cotton muslin saree decorated with exquisite hand-woven geometric patterns. A masterpiece of traditional weaving heritage.',
+    price: 229,
+    stock: 15,
+    category: 'Jamdani',
+    imageUrl: 'https://images.unsplash.com/photo-1610030470298-40b355e54d8b?auto=format&fit=crop&q=80&w=600',
     salesCount: 39,
     rating: 4.7
   },
   {
     id: 'prod-6',
-    name: 'Voxel Ambient LED Column',
-    description: 'Chambered acrylic and aluminum lighting tower that pulses with customizable architectural spectra. Integrated smart assistant triggers.',
-    price: 129,
+    name: 'Blush Pink Georgette Saree',
+    description: 'Flowy, crinkled premium georgette fabric adorned with intricate white Chikankari hand embroidery and delicate shimmering sequins.',
+    price: 189,
     stock: 2, // Low stock warning!
-    category: 'Lighting',
-    imageUrl: 'https://images.unsplash.com/photo-1507646227500-4d389b0012be?auto=format&fit=crop&q=80&w=600',
+    category: 'Georgette & Chiffon',
+    imageUrl: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&q=80&w=600',
     salesCount: 95,
     rating: 4.9
   }
@@ -155,10 +155,10 @@ let orders: Order[] = [
     customerName: 'John Doe',
     customerEmail: 'customer@example.com',
     items: [
-      { productId: 'prod-1', name: 'Epsilon Mechanical Keyboard', quantity: 1, price: 189 },
-      { productId: 'prod-2', name: 'Monolith Merino Felt Desk Pad', quantity: 1, price: 49 }
+      { productId: 'prod-1', name: 'Karuja Royal Banarasi Silk Saree', quantity: 1, price: 299 },
+      { productId: 'prod-2', name: 'Heritage Kanjeevaram Brocade Saree', quantity: 1, price: 349 }
     ],
-    total: 238,
+    total: 648,
     paymentGateway: 'credit_card',
     paymentStatus: 'paid',
     shippingStatus: 'delivered',
@@ -174,9 +174,9 @@ let orders: Order[] = [
     customerName: 'John Doe',
     customerEmail: 'customer@example.com',
     items: [
-      { productId: 'prod-4', name: 'Nova Wireless Qi Concrete Dock', quantity: 1, price: 69 }
+      { productId: 'prod-4', name: 'Amethyst Organza Floral Saree', quantity: 1, price: 129 }
     ],
-    total: 69,
+    total: 129,
     paymentGateway: 'google_pay',
     paymentStatus: 'paid',
     shippingStatus: 'shipped',
@@ -192,10 +192,10 @@ let orders: Order[] = [
     customerName: 'Alex Mercer',
     customerEmail: 'alex.m@example.com',
     items: [
-      { productId: 'prod-3', name: 'Apex Aluminum Monitor Riser', quantity: 2, price: 89 },
-      { productId: 'prod-5', name: 'Orbit Anodized Tidy Tray', quantity: 1, price: 59 }
+      { productId: 'prod-3', name: 'Elegant Ivory Chanderi Silk Saree', quantity: 2, price: 159 },
+      { productId: 'prod-5', name: 'Midnight Jamdani Dhakai Saree', quantity: 1, price: 229 }
     ],
-    total: 237,
+    total: 547,
     paymentGateway: 'paypal',
     paymentStatus: 'paid',
     shippingStatus: 'processing',
@@ -211,9 +211,9 @@ let orders: Order[] = [
     customerName: 'Elena Rostova',
     customerEmail: 'elena.r@example.com',
     items: [
-      { productId: 'prod-6', name: 'Voxel Ambient LED Column', quantity: 1, price: 129 }
+      { productId: 'prod-6', name: 'Blush Pink Georgette Saree', quantity: 1, price: 189 }
     ],
-    total: 129,
+    total: 189,
     paymentGateway: 'credit_card',
     paymentStatus: 'paid',
     shippingStatus: 'pending',
@@ -229,10 +229,10 @@ let orders: Order[] = [
     customerName: 'Marcus Aurelius',
     customerEmail: 'philosopher@rome.it',
     items: [
-      { productId: 'prod-1', name: 'Epsilon Mechanical Keyboard', quantity: 1, price: 189 },
-      { productId: 'prod-6', name: 'Voxel Ambient LED Column', quantity: 1, price: 129 }
+      { productId: 'prod-1', name: 'Karuja Royal Banarasi Silk Saree', quantity: 1, price: 299 },
+      { productId: 'prod-6', name: 'Blush Pink Georgette Saree', quantity: 1, price: 189 }
     ],
-    total: 318,
+    total: 488,
     paymentGateway: 'credit_card',
     paymentStatus: 'paid',
     shippingStatus: 'pending',
@@ -432,6 +432,23 @@ export const db = {
 
   getUsers: () => users,
   getUser: (id: string) => users.find(u => u.id === id),
+  createUser: (u: { email: string; name: string; role: 'customer' | 'admin'; phone?: string; address?: string }) => {
+    const existing = users.find(user => user.email.toLowerCase() === u.email.toLowerCase());
+    if (existing) {
+      throw new Error('An account with this email already exists.');
+    }
+    const newUser: UserProfile = {
+      id: `user-${Date.now()}`,
+      email: u.email,
+      name: u.name,
+      phone: u.phone || '',
+      address: u.address || '',
+      role: u.role,
+      permissions: u.role === 'admin' ? ['manage_products', 'manage_orders', 'view_analytics'] : []
+    };
+    users.push(newUser);
+    return newUser;
+  },
   updateUserProfile: (id: string, updates: Partial<UserProfile>) => {
     users = users.map(u => u.id === id ? { ...u, ...updates } : u);
     return users.find(u => u.id === id);

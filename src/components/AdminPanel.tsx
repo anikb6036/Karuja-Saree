@@ -3,7 +3,7 @@ import { Product, Order, UserProfile, AdCampaign, AnalyticsSummary } from '../ty
 import { 
   Plus, Edit2, Trash2, RefreshCw, Sparkles, TrendingUp, DollarSign, 
   ShoppingCart, Users, Layers, AlertCircle, Play, Pause, Save, CheckCircle, 
-  ChevronRight, FileText, Clipboard, Settings, HelpCircle, Eye
+  ChevronRight, FileText, Clipboard, Settings, HelpCircle, Eye, LogOut
 } from 'lucide-react';
 import { 
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, 
@@ -18,6 +18,8 @@ interface AdminPanelProps {
   campaigns: AdCampaign[];
   usersList: UserProfile[];
   onRefreshAll: () => void;
+  onIdentityChange?: (userId: string) => void;
+  onLogout?: () => void;
 }
 
 export default function AdminPanel({
@@ -26,7 +28,9 @@ export default function AdminPanel({
   orders,
   campaigns,
   usersList,
-  onRefreshAll
+  onRefreshAll,
+  onIdentityChange,
+  onLogout
 }: AdminPanelProps) {
   // Tabs: analytics, inventory, orders, campaigns, users, ai-insights
   const [activeTab, setActiveTab] = useState<'analytics' | 'inventory' | 'orders' | 'marketing' | 'users' | 'ai-insights'>('analytics');
@@ -345,48 +349,64 @@ export default function AdminPanel({
       </AnimatePresence>
 
       {/* Admin header */}
-      <div className="border-b border-neutral-200 bg-white px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center space-x-8">
-          <div className="flex items-center space-x-2">
-            <Settings className="w-4.5 h-4.5 text-neutral-950 animate-spin-slow" />
-            <h2 className="font-display font-semibold tracking-tight text-lg text-neutral-950 uppercase">
-              Administrator Suite
-            </h2>
+      <div className="border-b border-neutral-200 bg-white px-4 py-3 md:px-6 md:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Settings className="w-4.5 h-4.5 text-neutral-950 animate-spin-slow" />
+              <h2 className="font-display font-semibold tracking-tight text-base md:text-lg text-neutral-950 uppercase">
+                Administrator Suite
+              </h2>
+            </div>
+
+            {/* Mobile Actions: Only visible on extra small screens (< 640px) */}
+            <div className="flex items-center space-x-2 sm:hidden">
+              {onLogout && (
+                <button
+                  onClick={onLogout}
+                  className="p-2 border border-red-100 text-red-700 hover:bg-red-50 transition-colors cursor-pointer"
+                  title="Sign out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </div>
-          <nav className="flex space-x-6 text-xs font-mono uppercase tracking-wider text-neutral-400">
+
+          <nav className="flex space-x-5 text-[11px] md:text-xs font-mono uppercase tracking-wider text-neutral-400 overflow-x-auto scrollbar-none pb-1 sm:pb-0">
             <button 
               onClick={() => setActiveTab('analytics')}
-              className={`hover:text-neutral-950 transition-colors ${activeTab === 'analytics' ? 'text-neutral-950 font-medium border-b border-neutral-950 pb-1' : ''}`}
+              className={`hover:text-neutral-950 transition-colors whitespace-nowrap pb-1 ${activeTab === 'analytics' ? 'text-neutral-950 font-medium border-b border-neutral-950' : ''}`}
             >
               Sales Analytics
             </button>
             <button 
               onClick={() => setActiveTab('inventory')}
-              className={`hover:text-neutral-950 transition-colors ${activeTab === 'inventory' ? 'text-neutral-950 font-medium border-b border-neutral-950 pb-1' : ''}`}
+              className={`hover:text-neutral-950 transition-colors whitespace-nowrap pb-1 ${activeTab === 'inventory' ? 'text-neutral-950 font-medium border-b border-neutral-950' : ''}`}
             >
               Inventory Manager
             </button>
             <button 
               onClick={() => setActiveTab('orders')}
-              className={`hover:text-neutral-950 transition-colors ${activeTab === 'orders' ? 'text-neutral-950 font-medium border-b border-neutral-950 pb-1' : ''}`}
+              className={`hover:text-neutral-950 transition-colors whitespace-nowrap pb-1 ${activeTab === 'orders' ? 'text-neutral-950 font-medium border-b border-neutral-950' : ''}`}
             >
               Order Tracking
             </button>
             <button 
               onClick={() => setActiveTab('marketing')}
-              className={`hover:text-neutral-950 transition-colors ${activeTab === 'marketing' ? 'text-neutral-950 font-medium border-b border-neutral-950 pb-1' : ''}`}
+              className={`hover:text-neutral-950 transition-colors whitespace-nowrap pb-1 ${activeTab === 'marketing' ? 'text-neutral-950 font-medium border-b border-neutral-950' : ''}`}
             >
               Social Ads Hub
             </button>
             <button 
               onClick={() => setActiveTab('users')}
-              className={`hover:text-neutral-950 transition-colors ${activeTab === 'users' ? 'text-neutral-950 font-medium border-b border-neutral-950 pb-1' : ''}`}
+              className={`hover:text-neutral-950 transition-colors whitespace-nowrap pb-1 ${activeTab === 'users' ? 'text-neutral-950 font-medium border-b border-neutral-950' : ''}`}
             >
               Security Roles
             </button>
             <button 
               onClick={() => setActiveTab('ai-insights')}
-              className={`hover:text-neutral-950 transition-colors flex items-center space-x-1 ${activeTab === 'ai-insights' ? 'text-neutral-950 font-medium border-b border-neutral-950 pb-1' : ''}`}
+              className={`hover:text-neutral-950 transition-colors flex items-center space-x-1 whitespace-nowrap pb-1 ${activeTab === 'ai-insights' ? 'text-neutral-950 font-medium border-b border-neutral-950' : ''}`}
             >
               <Sparkles className="w-3 h-3 text-neutral-900" />
               <span>AI Strategic Insights</span>
@@ -394,22 +414,25 @@ export default function AdminPanel({
           </nav>
         </div>
 
-        <div className="flex items-center space-x-4">
-          <div className="text-right font-mono text-[10px] text-neutral-500">
-            <div>Security Node Status</div>
-            <div className="text-emerald-600 font-bold">● FULL AUTHORIZATION</div>
+        <div className="hidden sm:flex items-center space-x-4">
+          <div className="text-right text-xs text-neutral-500">
+            <div className="font-light">Security Node Status</div>
+            <div className="text-emerald-600 font-semibold">● FULL AUTHORIZATION</div>
           </div>
-          <button 
-            onClick={() => {
-              fetchAnalytics();
-              onRefreshAll();
-              triggerToast('Refreshed administrative data caches');
-            }}
-            className="p-2 border border-neutral-200 rounded-none hover:bg-neutral-50 transition-colors"
-            title="Reload metrics cache"
-          >
-            <RefreshCw className="w-3.5 h-3.5 text-neutral-600" />
-          </button>
+
+          {onLogout && (
+            <>
+              <span className="text-neutral-300">|</span>
+              <button
+                onClick={onLogout}
+                className="flex items-center space-x-1 hover:text-[#FF8080] text-red-700 transition-colors text-xs font-semibold cursor-pointer"
+                title="Sign out of current session"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Logout</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
 

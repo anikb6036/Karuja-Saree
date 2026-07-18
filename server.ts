@@ -47,6 +47,19 @@ async function startServer() {
     res.json(user);
   });
 
+  app.post('/api/users', (req, res) => {
+    try {
+      const { email, name, role, phone, address } = req.body;
+      if (!email || !name || !role) {
+        return res.status(400).json({ error: 'Email, Name, and Role are required.' });
+      }
+      const newUser = db.createUser({ email, name, role, phone, address });
+      res.status(201).json(newUser);
+    } catch (e: any) {
+      res.status(400).json({ error: e.message });
+    }
+  });
+
   app.put('/api/users/:id', (req, res) => {
     const { name, phone, address, role } = req.body;
     const updated = db.updateUserProfile(req.params.id, { name, phone, address, role });
