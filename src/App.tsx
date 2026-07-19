@@ -35,12 +35,28 @@ export default function App() {
         }
       };
 
-      const [prods, ords, camps, users] = await Promise.all([
+      let [prods, ords, camps, users] = await Promise.all([
         fetchItem('/api/products'),
         fetchItem('/api/orders'),
         fetchItem('/api/campaigns'),
         fetchItem('/api/users')
       ]);
+
+      if (!prods || prods.length === 0) {
+        console.log('Products empty or missing. Attempting to initialize DB...');
+        try {
+          await fetch('/api/init-db', { method: 'POST' });
+          const retryProds = await fetchItem('/api/products');
+          if (retryProds) {
+            prods = retryProds;
+            ords = await fetchItem('/api/orders') || [];
+            camps = await fetchItem('/api/campaigns') || [];
+            users = await fetchItem('/api/users') || [];
+          }
+        } catch (e) {
+          console.error('Failed to init DB:', e);
+        }
+      }
 
       if (prods) setProducts(prods);
       if (ords) setOrders(ords);

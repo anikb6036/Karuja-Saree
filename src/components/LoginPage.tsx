@@ -151,7 +151,7 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
 
           <div className="w-16 h-[1px] bg-[#C5A880]/50 mx-auto" />
 
-          <p className="font-mono text-[10px] text-neutral-300 leading-relaxed tracking-wider uppercase">
+          <p className="font-sans text-[10px] text-neutral-300 leading-relaxed tracking-wider uppercase font-medium">
             ESTABLISHED IN BANARAS • PRESERVING ANCIENT METALLIC BROCADES AND SHEER SILK WEAVING TRADITIONS FOR GENERATIONS.
           </p>
         </div>
@@ -192,9 +192,9 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
                 setError(null);
                 setSuccessMsg(null);
               }}
-              className={`pb-3 font-mono text-[10px] uppercase tracking-wider text-center border-b transition-all duration-200 cursor-pointer ${
+              className={`pb-3 font-sans text-xs uppercase tracking-wider text-center border-b transition-all duration-200 cursor-pointer ${
                 activeTab === 'signin'
-                  ? 'border-[#6B1426] text-[#6B1426] font-bold'
+                  ? 'border-[#6B1426] text-[#6B1426] font-semibold'
                   : 'border-transparent text-neutral-400 hover:text-neutral-600'
               }`}
             >
@@ -206,9 +206,9 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
                 setError(null);
                 setSuccessMsg(null);
               }}
-              className={`pb-3 font-mono text-[10px] uppercase tracking-wider text-center border-b transition-all duration-200 cursor-pointer ${
+              className={`pb-3 font-sans text-xs uppercase tracking-wider text-center border-b transition-all duration-200 cursor-pointer ${
                 activeTab === 'signup'
-                  ? 'border-[#6B1426] text-[#6B1426] font-bold'
+                  ? 'border-[#6B1426] text-[#6B1426] font-semibold'
                   : 'border-transparent text-neutral-400 hover:text-neutral-600'
               }`}
             >
@@ -223,7 +223,7 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="bg-red-50 text-red-700 border border-red-200 text-[11px] font-mono p-3 mb-5 leading-relaxed"
+                className="bg-red-50 text-red-700 border border-red-200 text-xs font-sans p-3 mb-5 leading-relaxed rounded-md"
               >
                 {error}
               </motion.div>
@@ -234,7 +234,7 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-mono p-3 mb-5 leading-relaxed flex items-center space-x-2"
+                className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-sans p-3 mb-5 leading-relaxed flex items-center space-x-2 rounded-md"
               >
                 <Sparkles className="w-3.5 h-3.5 shrink-0 animate-pulse text-emerald-600" />
                 <span>{successMsg}</span>
@@ -244,9 +244,9 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
 
           {/* Forms */}
           {activeTab === 'signin' ? (
-            <form onSubmit={handleSignIn} className="space-y-4 font-mono text-[10px]">
+            <form onSubmit={handleSignIn} className="space-y-4 font-sans text-sm">
               <div className="space-y-1">
-                <label className="text-[#A5927A] block font-bold">EMAIL ADDRESS</label>
+                <label className="text-[#A5927A] block font-semibold text-xs tracking-wider">EMAIL ADDRESS</label>
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-neutral-400">
                     <Mail className="w-3.5 h-3.5" />
@@ -257,15 +257,15 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
                     placeholder="patron@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426]"
+                    className="w-full pl-9 pr-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426] rounded-md text-sm"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
                 <div className="flex justify-between items-center">
-                  <label className="text-[#A5927A] block font-bold">SECURE PASSCODE (SIMULATED)</label>
-                  <span className="text-neutral-400 text-[8px]">ANY KEYWORDS PERMITTED</span>
+                  <label className="text-[#A5927A] block font-semibold text-xs tracking-wider">SECURE PASSCODE (SIMULATED)</label>
+                  <span className="text-neutral-400 text-[10px]">ANY KEYWORDS PERMITTED</span>
                 </div>
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-neutral-400">
@@ -276,23 +276,23 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426]"
+                    className="w-full pl-9 pr-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426] rounded-md text-sm"
                   />
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-2.5 bg-[#6B1426] text-white text-[10px] uppercase tracking-widest hover:bg-[#540F1D] flex items-center justify-center space-x-1.5 cursor-pointer mt-6 transition-all duration-150"
+                className="w-full py-2.5 bg-[#6B1426] text-white text-xs uppercase tracking-widest hover:bg-[#540F1D] flex items-center justify-center space-x-1.5 cursor-pointer mt-6 rounded-md transition-all duration-150 font-medium"
               >
                 <span>Enter Boutique Atelier</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </form>
           ) : (
-            <form onSubmit={handleSignUp} className="space-y-4 font-mono text-[10px]">
+            <form onSubmit={handleSignUp} className="space-y-4 font-sans text-sm">
               <div className="space-y-1">
-                <label className="text-[#A5927A] block font-bold">PATRON FULL NAME</label>
+                <label className="text-[#A5927A] block font-semibold text-xs tracking-wider">PATRON FULL NAME</label>
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-neutral-400">
                     <User className="w-3.5 h-3.5" />
@@ -303,13 +303,13 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
                     placeholder="Empress Maharani"
                     value={regName}
                     onChange={(e) => setRegName(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426]"
+                    className="w-full pl-9 pr-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426] rounded-md text-sm"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-[#A5927A] block font-bold">EMAIL ADDRESS</label>
+                <label className="text-[#A5927A] block font-semibold text-xs tracking-wider">EMAIL ADDRESS</label>
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-neutral-400">
                     <Mail className="w-3.5 h-3.5" />
@@ -320,14 +320,14 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
                     placeholder="maharani@heritage.in"
                     value={regEmail}
                     onChange={(e) => setRegEmail(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426]"
+                    className="w-full pl-9 pr-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426] rounded-md text-sm"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
-                  <label className="text-[#A5927A] block font-bold">MOBILE NO (OPTIONAL)</label>
+                  <label className="text-[#A5927A] block font-semibold text-xs tracking-wider">MOBILE NO (OPTIONAL)</label>
                   <div className="relative">
                     <span className="absolute left-3 top-2.5 text-neutral-400">
                       <Phone className="w-3.5 h-3.5" />
@@ -337,17 +337,17 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
                       placeholder="+91 99999 12345"
                       value={regPhone}
                       onChange={(e) => setRegPhone(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426]"
+                      className="w-full pl-9 pr-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426] rounded-md text-sm"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[#A5927A] block font-bold">INITIAL ATELIER ROLE</label>
+                  <label className="text-[#A5927A] block font-semibold text-xs tracking-wider">INITIAL ATELIER ROLE</label>
                   <select
                     value={regRole}
                     onChange={(e) => setRegRole(e.target.value as 'customer' | 'admin')}
-                    className="w-full px-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426] h-[31.5px]"
+                    className="w-full px-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426] h-[35px] rounded-md text-sm"
                   >
                     <option value="customer">PATRON (CUSTOMER)</option>
                     <option value="admin">DIRECTOR (ADMIN)</option>
@@ -356,7 +356,7 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
               </div>
 
               <div className="space-y-1">
-                <label className="text-[#A5927A] block font-bold">PHYSICAL DEPOSIT/SHIPPING ADDRESS</label>
+                <label className="text-[#A5927A] block font-semibold text-xs tracking-wider">PHYSICAL DEPOSIT/SHIPPING ADDRESS</label>
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-neutral-400">
                     <MapPin className="w-3.5 h-3.5" />
@@ -366,7 +366,7 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
                     placeholder="Palace Block C, Chanakyapuri, New Delhi"
                     value={regAddress}
                     onChange={(e) => setRegAddress(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426]"
+                    className="w-full pl-9 pr-3 py-2 border border-[#EAE3D5] bg-white text-neutral-800 focus:outline-none focus:border-[#6B1426] rounded-md text-sm"
                   />
                 </div>
               </div>
@@ -374,7 +374,7 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-2.5 bg-[#6B1426] text-white text-[10px] uppercase tracking-widest hover:bg-[#540F1D] flex items-center justify-center space-x-1.5 cursor-pointer mt-6 disabled:bg-neutral-300 transition-all duration-150"
+                className="w-full py-2.5 bg-[#6B1426] text-white text-xs uppercase tracking-widest hover:bg-[#540F1D] flex items-center justify-center space-x-1.5 cursor-pointer mt-6 disabled:bg-neutral-300 rounded-md transition-all duration-150 font-medium"
               >
                 {isSubmitting ? (
                   <span>Saving Heirloom Account...</span>
@@ -392,7 +392,7 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
           <div className="mt-8 pt-6 border-t border-[#EAE3D5]/60">
             <div className="flex items-center space-x-1 mb-3.5 justify-center">
               <ShieldCheck className="w-3.5 h-3.5 text-[#C5A880]" />
-              <span className="text-[9px] font-mono text-[#A5927A] uppercase tracking-wider font-bold">
+              <span className="text-[10px] font-sans text-[#A5927A] uppercase tracking-wider font-semibold">
                 Simulated Sandbox Quick-Sign-In
               </span>
             </div>
@@ -401,15 +401,15 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
               <button
                 type="button"
                 onClick={() => handleQuickLogin('customer@example.com')}
-                className="p-2.5 border border-[#EAE3D5] bg-white hover:border-[#6B1426] hover:bg-[#FCFBF9] text-left transition-all duration-150 group cursor-pointer"
+                className="p-2.5 border border-[#EAE3D5] bg-white hover:border-[#6B1426] hover:bg-[#FCFBF9] text-left rounded-md transition-all duration-150 group cursor-pointer"
               >
-                <div className="text-[7px] font-mono text-neutral-400 uppercase tracking-widest">
+                <div className="text-[9px] font-sans text-neutral-400 uppercase tracking-wide">
                   Patron Access
                 </div>
-                <div className="text-[10px] font-mono font-bold text-[#1E110F] group-hover:text-[#6B1426]">
+                <div className="text-xs font-sans font-semibold text-[#1E110F] group-hover:text-[#6B1426]">
                   John Doe
                 </div>
-                <div className="text-[8px] font-mono text-neutral-500 overflow-hidden truncate">
+                <div className="text-[11px] font-sans text-neutral-500 overflow-hidden truncate">
                   customer@example.com
                 </div>
               </button>
@@ -417,15 +417,15 @@ export default function LoginPage({ usersList, onLoginSuccess, onRefreshUsers }:
               <button
                 type="button"
                 onClick={() => handleQuickLogin('admin@example.com')}
-                className="p-2.5 border border-[#EAE3D5] bg-white hover:border-[#6B1426] hover:bg-[#FCFBF9] text-left transition-all duration-150 group cursor-pointer"
+                className="p-2.5 border border-[#EAE3D5] bg-white hover:border-[#6B1426] hover:bg-[#FCFBF9] text-left rounded-md transition-all duration-150 group cursor-pointer"
               >
-                <div className="text-[7px] font-mono text-neutral-400 uppercase tracking-widest">
+                <div className="text-[9px] font-sans text-neutral-400 uppercase tracking-wide">
                   Atelier Director
                 </div>
-                <div className="text-[10px] font-mono font-bold text-[#1E110F] group-hover:text-[#6B1426]">
+                <div className="text-xs font-sans font-semibold text-[#1E110F] group-hover:text-[#6B1426]">
                   Sarah Jenkins
                 </div>
-                <div className="text-[8px] font-mono text-neutral-500 overflow-hidden truncate">
+                <div className="text-[11px] font-sans text-neutral-500 overflow-hidden truncate">
                   admin@example.com
                 </div>
               </button>
