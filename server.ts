@@ -1,15 +1,11 @@
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
 import { db, getAnalyticsSummary } from './server/db.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
-const __filename = import.meta.url ? fileURLToPath(import.meta.url) : '';
-const __dirname = __filename ? path.dirname(__filename) : process.cwd();
 
 const app = express();
 const PORT = 3000;
